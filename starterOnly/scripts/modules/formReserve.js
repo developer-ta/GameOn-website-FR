@@ -28,8 +28,8 @@ let areAllValide = [];
 //var regExp
 let regExDate = '^0[0-9]|[12][0-9]|3[01]/(0[1-9]|1[1,2])/(19|20)d{2}$';
 let regExEmail = '[a-z0-9._-]+@[a-z0-9._-]+\\.[a-z0-9._-]+';
-let regExName = '[a-zA-Z._-]+';
-let regExQuantity = '[0-9]+';
+let regExName = '^[a-zA-Z._-]+$';
+let regExQuantity = '^[0-9]+$';
 
 //message errors
 const MgErrors = {
@@ -196,9 +196,7 @@ let initFormValidator = () => {
 function validate() {
   debugger;
   let isValide = true;
-  initFormValidator().forEach((bool) => {
-    if (!bool) isValide = false;
-  });
+  if (initFormValidator().includes(false)) isValide = false;
   return isValide;
 }
 
@@ -215,4 +213,4 @@ $submit_btn.addEventListener('click', (ev) => {
 });
 
 console.log('formReserve');
-_console_Log('_____________________' + $birthDate_Input);
+
