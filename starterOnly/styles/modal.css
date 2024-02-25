@@ -210,21 +210,22 @@ input {
 }
 .formData[data-error]::after {
   content: attr(data-error);
-  font-size: 0.6em;
+  font-size: 0.5em;
   color: #e54858;
   display: block;
   margin-top: 7px;
   margin-bottom: 7px;
   text-align: right;
-  line-height: 0.3;
+  line-height: 0.7;
   opacity: 0; 
-  transition: 0.3s;
+  transition: 0.4s;
 }
 .formData[data-error-visible="true"]::after {
   opacity: 1;
 }
 .formData[data-error-visible="true"] .text-control {
-  border: 2px solid #e54858;
+  /* border: 0.5px solid #e54858; */
+  box-shadow: 0px 0px 5px 4px #e54858;
 }
 /* 
 input[data-error]::after {

@@ -28,113 +28,150 @@ let areAllValide = [];
 //var regExp
 let regExDate = '^0[0-9]|[12][0-9]|3[01]/(0[1-9]|1[1,2])/(19|20)d{2}$';
 let regExEmail = '[a-z0-9._-]+@[a-z0-9._-]+\\.[a-z0-9._-]+';
-let regExName = '[a-z0-9._-]+';
+let regExName = '[a-zA-Z._-]+';
 let regExQuantity = '[0-9]+';
 
+//message errors
+const MgErrors = {
+  name: {
+    empty: 'Veuillez entrer votre nom.',
+    invalid: 'Le nom que vous avez saisi est invalide. Veuillez réessayer.',
+  },
+  firstName: {
+    empty: 'Veuillez entrer votre prénom.',
+    invalid: 'Le prénom que vous avez saisi est invalide. Veuillez réessayer.',
+  },
+  email: {
+    empty: 'Veuillez entrer une adresse email valide.',
+    invalid: "L'adresse email que vous avez saisie est invalide. Veuillez réessayer.",
+  },
+  date: {
+    empty: 'Veuillez entrer votre date de naissance.',
+    invalid: 'la date de naissance que vous avez saisie est invalide. Veuillez réessayer.',
+  },
+  quantity: {
+    empty: 'Veuillez indiquer combien de tournois GameOn vous avez déjà participé.',
+    invalid:
+      'Veuillez saisir un nombre valide pour le nombre de tournois GameOn auxquels vous avez participé.',
+  },
+  location: {
+    empty: 'Veuillez sélectionner une ville.',
+  },
+  conditions: { empty: "Veuillez accepter les conditions d'utilisation pour continuer." },
+};
 // Les fonctions validation input name/email/date
-
 let validateDateIn = () => {
   debugger;
-  let errorMg = 'validateDateIn no valide!';
-  let valideVal = valideValue(regExDate, $birthDate_Input, errorMg);
+
+  let valideVal = valideValue(regExDate, $birthDate_Input, MgErrors.date);
   if (valideVal !== '') {
     dataReserve.birthDate = valideVal;
-    return areAllValide.push(true);
+    areAllValide.push(true);
+    return;
   }
   _console_Log('validateDateIn no valide!');
-  return areAllValide.push(false);
+  areAllValide.push(false);
 };
 
 let validateEmailIn = () => {
   debugger;
-  let errorMg = 'email no valide!';
-  let valideVal = valideValue(regExEmail, $email_Input, errorMg);
+
+  let valideVal = valideValue(regExEmail, $email_Input, MgErrors.email);
 
   if (valideVal !== '') {
     dataReserve.email = valideVal;
-    return areAllValide.push(true);
+    areAllValide.push(true);
+    return;
   }
   _console_Log('email no valide!');
-  return areAllValide.push(false);
+  areAllValide.push(false);
 };
-
+//name or firstName
 let validateIdentity = (identity) => {
   debugger;
   let valideVal = '';
-  let errorMg = `${identity} no valide no valide!`;
+
   if (identity === 'firstName') {
-    valideVal = valideValue(regExName, $firstName_Input, errorMg);
+    valideVal = valideValue(regExName, $firstName_Input, MgErrors.firstName);
     if (valideVal !== '') {
       dataReserve.firstName = valideVal;
-      return areAllValide.push(true);
+      areAllValide.push(true);
+      return;
     }
   } else {
     debugger;
-    valideVal = valideValue(regExName, $name_Input, errorMg);
+    valideVal = valideValue(regExName, $name_Input, MgErrors.name);
     if (valideVal !== '') {
       dataReserve.name = valideVal;
-      return areAllValide.push(true);
+      areAllValide.push(true);
+      return;
     }
   }
+  areAllValide.push(false);
   _console_Log('name no valide!');
-  return areAllValide.push(false);
 };
 
 let validateQuantityIn = () => {
   debugger;
-  let errorMg = 'quantity no valide!';
-  let valideVAl = valideValue(regExQuantity, $quantity_Input, errorMg);
+
+  let valideVAl = valideValue(regExQuantity, $quantity_Input, MgErrors.quantity);
   if (valideVAl !== '') {
     dataReserve.quantity = valideVAl;
-    return areAllValide.push(true);
+    areAllValide.push(true);
+    return;
   }
+  areAllValide.push(false);
   _console_Log('quantity no valide!');
-  return areAllValide.push(false);
 };
 // extension for validate form input value
 let valideValue = (regex, elementInput, errorMg) => {
   debugger;
-  let errorVisible = false;
-  elementInput.parentNode.setAttribute('data-error', `${errorMg}`);
-  elementInput.parentNode.setAttribute('data-error-visible', errorVisible);
   let reg = new RegExp(regex);
   let _el = elementInput.value.trim();
+  let errorVisible = false;
+  elementInput.parentNode.setAttribute(
+    'data-error',
+    `${_el.length > 0 ? errorMg.invalid : errorMg.empty}`
+  );
+  elementInput.parentNode.setAttribute('data-error-visible', errorVisible);
+
   if (reg.test(_el)) {
-    elementInput.classList.remove('error');
+    // elementInput.classList.remove('error');
     return _el;
   }
   //elementInput.insertAdjacentHTML('afterend', `<span id="errorMg">${errorMg}</span>`);
   elementInput.parentElement.dataset.errorVisible = !errorVisible;
   _console_Log(elementInput);
   //elementInput.classList.add('error');
-
   return '';
 };
 
 let checkLocationIn = () => {
   debugger;
-  let errorMg = 'Location no checked!';
-  let errorVisible = false;
-  $location_tag.setAttribute('data-error', `${errorMg}`);
-  $location_tag.setAttribute('data-error-visible', errorVisible);
 
-  $locations_Input.forEach((el) => {
+  let errorVisible = false;
+  $location_tag.setAttribute('data-error', `${MgErrors.location.empty}`);
+  $location_tag.setAttribute('data-error-visible', errorVisible);
+  for (const el of $locations_Input) {
     if (el.checked) {
       dataReserve.location = el.value;
-      return areAllValide.push(true);
+      areAllValide.push(true);
+      debugger;
+      _console_Log(el);
+      return;
     }
-  });
+  }
   // $location_tag.insertAdjacentHTML('afterend', `<span id="errorMg">${errorMg}</span>`);
   $location_tag.dataset.errorVisible = !errorVisible;
+  areAllValide.push(false);
   _console_Log('Location no checked!');
-  return areAllValide.push(false);
 };
 
 let checkConditionAccepted = () => {
   debugger;
-  let errorMg = 'no check condition ';
+
   let errorVisible = false;
-  $condition2_Input.parentNode.setAttribute('data-error', `${errorMg}`);
+  $condition2_Input.parentNode.setAttribute('data-error', `${MgErrors.conditions.empty}`);
   $condition2_Input.parentNode.setAttribute('data-error-visible', errorVisible);
 
   if (!$condition1_Input.checked) {
