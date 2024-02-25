@@ -58,7 +58,7 @@ let validateEmailIn = () => {
   return areAllValide.push(false);
 };
 
-let validateFirstName = (identity) => {
+let validateIdentity = (identity) => {
   debugger;
   let valideVal = '';
   let errorMg = `${identity} no valide no valide!`;
@@ -94,28 +94,38 @@ let validateQuantityIn = () => {
 // extension for validate form input value
 let valideValue = (regex, elementInput, errorMg) => {
   debugger;
+  let errorVisible = false;
+  elementInput.parentNode.setAttribute('data-error', `${errorMg}`);
+  elementInput.parentNode.setAttribute('data-error-visible', errorVisible);
   let reg = new RegExp(regex);
   let _el = elementInput.value.trim();
   if (reg.test(_el)) {
     elementInput.classList.remove('error');
     return _el;
   }
-  elementInput.insertAdjacentHTML('afterend', `<span id="errorMg">${errorMg}</span>`);
-  elementInput.classList.add('error');
+  //elementInput.insertAdjacentHTML('afterend', `<span id="errorMg">${errorMg}</span>`);
+  elementInput.parentElement.dataset.errorVisible = !errorVisible;
+  _console_Log(elementInput);
+  //elementInput.classList.add('error');
 
   return '';
 };
 
-let isLocalChecked = () => {
+let checkLocationIn = () => {
   debugger;
   let errorMg = 'Location no checked!';
+  let errorVisible = false;
+  $location_tag.parentNode.setAttribute('data-error', `${errorMg}`);
+  $location_tag.parentNode.setAttribute('data-error-visible', errorVisible);
+
   $locations_Input.forEach((el) => {
     if (el.checked) {
       dataReserve.location = el.value;
       return areAllValide.push(true);
     }
   });
-  $location_tag.insertAdjacentHTML('afterend', `<span id="errorMg">${errorMg}</span>`);
+  // $location_tag.insertAdjacentHTML('afterend', `<span id="errorMg">${errorMg}</span>`);
+  $location_tag.parentElement.dataset.errorVisible = !errorVisible;
   _console_Log('Location no checked!');
   return areAllValide.push(false);
 };
@@ -123,8 +133,13 @@ let isLocalChecked = () => {
 let checkConditionAccepted = () => {
   debugger;
   let errorMg = 'no check condition ';
+  let errorVisible = false;
+  $condition2_Input.parentNode.setAttribute('data-error', `${errorMg}`);
+  $condition2_Input.parentNode.setAttribute('data-error-visible', errorVisible);
+
   if (!$condition1_Input.checked) {
-    $condition2_Input.insertAdjacentHTML('afterend', `<span id="errorMg">${errorMg}</span>`);
+    //$condition2_Input.insertAdjacentHTML('afterend', `<span id="errorMg">${errorMg}</span>`);
+    $condition2_Input.parentElement.dataset.errorVisible = !errorVisible;
     return;
   }
   dataReserve.conditionsAccepted = [$condition1_Input.checked, $condition2_Input.checked];
@@ -132,11 +147,12 @@ let checkConditionAccepted = () => {
 
 let initFormValidator = () => {
   debugger;
-  validateFirstName('firstName');
-  validateFirstName('Name');
+  validateIdentity('firstName');
+  validateIdentity('Name');
+  validateEmailIn();
   validateDateIn();
   validateQuantityIn();
-  isLocalChecked();
+  checkLocationIn();
   checkConditionAccepted();
   return areAllValide;
 };
@@ -162,3 +178,4 @@ $submit_btn.addEventListener('click', (ev) => {
 });
 
 console.log('formReserve');
+_console_Log('_____________________' + $birthDate_Input);
