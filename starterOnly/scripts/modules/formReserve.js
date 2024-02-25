@@ -115,8 +115,8 @@ let checkLocationIn = () => {
   debugger;
   let errorMg = 'Location no checked!';
   let errorVisible = false;
-  $location_tag.parentNode.setAttribute('data-error', `${errorMg}`);
-  $location_tag.parentNode.setAttribute('data-error-visible', errorVisible);
+  $location_tag.setAttribute('data-error', `${errorMg}`);
+  $location_tag.setAttribute('data-error-visible', errorVisible);
 
   $locations_Input.forEach((el) => {
     if (el.checked) {
@@ -125,7 +125,7 @@ let checkLocationIn = () => {
     }
   });
   // $location_tag.insertAdjacentHTML('afterend', `<span id="errorMg">${errorMg}</span>`);
-  $location_tag.parentElement.dataset.errorVisible = !errorVisible;
+  $location_tag.dataset.errorVisible = !errorVisible;
   _console_Log('Location no checked!');
   return areAllValide.push(false);
 };
