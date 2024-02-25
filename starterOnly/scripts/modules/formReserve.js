@@ -4,6 +4,7 @@ let $firstName_Input = document.getElementById('first');
 let $name_Input = document.getElementById('last');
 let $email_Input = document.getElementById('email');
 let $birthDate_Input = document.getElementById('birthdate');
+let $location_tag = document.getElementById('location');
 
 //label =>À combien de tournois GameOn avez-vous déjà participé ?
 let $quantity_Input = document.getElementById('quantity');
@@ -34,7 +35,8 @@ let regExQuantity = '[0-9]+';
 
 let validateDateIn = () => {
   debugger;
-  let valideVal = valideValue(regExDate, $birthDate_Input);
+  let errorMg = 'validateDateIn no valide!';
+  let valideVal = valideValue(regExDate, $birthDate_Input, errorMg);
   if (valideVal !== '') {
     dataReserve.birthDate = valideVal;
     return areAllValide.push(true);
@@ -45,7 +47,8 @@ let validateDateIn = () => {
 
 let validateEmailIn = () => {
   debugger;
-  let valideVal = valideValue(regExEmail, $email_Input);
+  let errorMg = 'email no valide!';
+  let valideVal = valideValue(regExEmail, $email_Input, errorMg);
 
   if (valideVal !== '') {
     dataReserve.email = valideVal;
@@ -58,15 +61,16 @@ let validateEmailIn = () => {
 let validateFirstName = (identity) => {
   debugger;
   let valideVal = '';
-
+  let errorMg = `${identity} no valide no valide!`;
   if (identity === 'firstName') {
-    valideVal = valideValue(regExName, $firstName_Input);
+    valideVal = valideValue(regExName, $firstName_Input, errorMg);
     if (valideVal !== '') {
       dataReserve.firstName = valideVal;
       return areAllValide.push(true);
     }
   } else {
-    valideVal = valideValue(regExName, $name_Input);
+    debugger;
+    valideVal = valideValue(regExName, $name_Input, errorMg);
     if (valideVal !== '') {
       dataReserve.name = valideVal;
       return areAllValide.push(true);
@@ -78,7 +82,8 @@ let validateFirstName = (identity) => {
 
 let validateQuantityIn = () => {
   debugger;
-  let valideVAl = valideValue(regExQuantity, $quantity_Input);
+  let errorMg = 'quantity no valide!';
+  let valideVAl = valideValue(regExQuantity, $quantity_Input, errorMg);
   if (valideVAl !== '') {
     dataReserve.quantity = valideVAl;
     return areAllValide.push(true);
@@ -86,8 +91,8 @@ let validateQuantityIn = () => {
   _console_Log('quantity no valide!');
   return areAllValide.push(false);
 };
-// extension
-let valideValue = (regex, elementInput) => {
+// extension for validate form input value
+let valideValue = (regex, elementInput, errorMg) => {
   debugger;
   let reg = new RegExp(regex);
   let _el = elementInput.value.trim();
@@ -95,25 +100,31 @@ let valideValue = (regex, elementInput) => {
     elementInput.classList.remove('error');
     return _el;
   }
+  elementInput.insertAdjacentHTML('afterend', `<span id="errorMg">${errorMg}</span>`);
   elementInput.classList.add('error');
+
   return '';
 };
 
 let isLocalChecked = () => {
   debugger;
+  let errorMg = 'Location no checked!';
   $locations_Input.forEach((el) => {
     if (el.checked) {
       dataReserve.location = el.value;
       return areAllValide.push(true);
     }
   });
+  $location_tag.insertAdjacentHTML('afterend', `<span id="errorMg">${errorMg}</span>`);
   _console_Log('Location no checked!');
   return areAllValide.push(false);
 };
 
 let checkConditionAccepted = () => {
   debugger;
+  let errorMg = 'no check condition ';
   if (!$condition1_Input.checked) {
+    $condition2_Input.insertAdjacentHTML('afterend', `<span id="errorMg">${errorMg}</span>`);
     return;
   }
   dataReserve.conditionsAccepted = [$condition1_Input.checked, $condition2_Input.checked];
@@ -145,7 +156,9 @@ $submit_btn.addEventListener('click', (ev) => {
   if (!validate()) {
     debugger;
     _console_Log('validate no work');
+    return;
   }
+  _console_Log(dataReserve);
 });
 
 console.log('formReserve');
