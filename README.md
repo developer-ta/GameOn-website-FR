@@ -5,5 +5,5 @@
 4. Vous ne devez utiliser que du CSS personnalisé et du JavaScript pur, sans jQuery, Bootstrap ou autre librairie.
 
 
-# Projet problème aperçu
-1.modal form
+# link to web site
+https://developer-ta.github.io/GameOn-website-FR/
