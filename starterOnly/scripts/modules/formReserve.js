@@ -126,13 +126,11 @@ let validateQuantityIn = () => {
 // extension for validate form input value
 let valideValue = (regex, elementInput, errorMg) => {
   debugger;
+
   let reg = new RegExp(regex);
   let _el = elementInput.value.trim();
+
   let errorVisible = false;
-  elementInput.parentNode.setAttribute(
-    'data-error',
-    `${_el.length > 0 ? errorMg.invalid : errorMg.empty}`
-  );
   elementInput.parentNode.setAttribute('data-error-visible', errorVisible);
 
   if (reg.test(_el)) {
@@ -140,6 +138,10 @@ let valideValue = (regex, elementInput, errorMg) => {
     return _el;
   }
   //elementInput.insertAdjacentHTML('afterend', `<span id="errorMg">${errorMg}</span>`);
+  elementInput.parentNode.setAttribute(
+    'data-error',
+    `${_el.length > 0 ? errorMg.invalid : errorMg.empty}`
+  );
   elementInput.parentElement.dataset.errorVisible = !errorVisible;
   _console_Log(elementInput);
   //elementInput.classList.add('error');
@@ -150,7 +152,6 @@ let checkLocationIn = () => {
   debugger;
 
   let errorVisible = false;
-  $location_tag.setAttribute('data-error', `${MgErrors.location.empty}`);
   $location_tag.setAttribute('data-error-visible', errorVisible);
   for (const el of $locations_Input) {
     if (el.checked) {
@@ -162,6 +163,7 @@ let checkLocationIn = () => {
     }
   }
   // $location_tag.insertAdjacentHTML('afterend', `<span id="errorMg">${errorMg}</span>`);
+  $location_tag.setAttribute('data-error', `${MgErrors.location.empty}`);
   $location_tag.dataset.errorVisible = !errorVisible;
   areAllValide.push(false);
   _console_Log('Location no checked!');
@@ -171,11 +173,11 @@ let checkConditionAccepted = () => {
   debugger;
 
   let errorVisible = false;
-  $condition2_Input.parentNode.setAttribute('data-error', `${MgErrors.conditions.empty}`);
   $condition2_Input.parentNode.setAttribute('data-error-visible', errorVisible);
 
   if (!$condition1_Input.checked) {
     //$condition2_Input.insertAdjacentHTML('afterend', `<span id="errorMg">${errorMg}</span>`);
+    $condition2_Input.parentNode.setAttribute('data-error', `${MgErrors.conditions.empty}`);
     $condition2_Input.parentElement.dataset.errorVisible = !errorVisible;
     return;
   }
