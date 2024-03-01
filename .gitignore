@@ -1,0 +1,4 @@
+*.scss
+starterOnly/styles/dist
+.vscode/settings.json
+
