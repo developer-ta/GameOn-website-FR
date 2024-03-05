@@ -52,7 +52,7 @@ var MgErrors = {
   conditions: {
     empty: "Veuillez accepter les conditions d'utilisation pour continuer."
   }
-}; // Les fonctions validation input name/email/date
+}; // Les fonctions valider la valeur d'entrée du formulaire pour firstName/name/email/date/Quantity
 
 var validateDateIn = function validateDateIn() {
   var valideVal = valideValue(regExDate, $birthDate_Input, MgErrors.date);
