@@ -1,10 +1,6 @@
 "use strict";
 
-var _console_Log = function _console_Log(str) {
-  return console.log(str);
-}; //Récupérer les champs saisis de formulaire
-
-
+//Récupérer les champs saisis de formulaire
 var $firstName_Input = document.getElementById('first');
 var $name_Input = document.getElementById('last');
 var $email_Input = document.getElementById('email');
@@ -16,27 +12,13 @@ var $condition2_Input = document.getElementById('checkbox2'); //Récupérer le d
 
 var $location_tag = document.getElementById('location'); //Récupérer le bouton de soumission du formulaire
 
-var $submit_btn = document.querySelector("input[type='submit']"); // Ajax data
+var $submit_btn = document.querySelector("input[type='submit']"); // Objet qui représente une réservation de forme.
 
-/** @type {object} 
+var dataReserve = {};
 /**
- * Objet qui représente une réservation de forme.
- * @typedef {Object} Inscription
- * @property {string} firstName - Le nom complet de la personne effectuant la réservation.
- * @property {string} Name - Le nom complet de la personne effectuant la réservation.
- * @property {string} email - L'adresse e-mail de la personne effectuant la réservation.
- * @property {string} date - La date de la réservation.
- * @property {number} numberOfPeople - Le nombre de personnes pour la réservation.
- * @property {string[]} cities - Les villes sélectionnées pour la réservation.
- */
+ *@type {boolean[]}  */
 
-var dataReserve = {}; //validation form by condition
-
-/** 
-*
-@type {boolean[]} */
-
-var areAllValide = []; //var regExp
+var areAllValide = []; //regExp
 
 var regExDate = '^0[0-9]|[12][0-9]|3[01]/(0[1-9]|1[1,2])/(19|20)d{2}$';
 var regExEmail = '[a-z0-9._-]+@[a-z0-9._-]+\\.[a-z0-9._-]+';
@@ -73,7 +55,6 @@ var MgErrors = {
 }; // Les fonctions validation input name/email/date
 
 var validateDateIn = function validateDateIn() {
-  debugger;
   var valideVal = valideValue(regExDate, $birthDate_Input, MgErrors.date);
 
   if (valideVal !== '') {
@@ -82,13 +63,10 @@ var validateDateIn = function validateDateIn() {
     return;
   }
 
-  _console_Log('validateDateIn no valide!');
-
   areAllValide.push(false);
 };
 
 var validateEmailIn = function validateEmailIn() {
-  debugger;
   var valideVal = valideValue(regExEmail, $email_Input, MgErrors.email);
 
   if (valideVal !== '') {
@@ -97,14 +75,11 @@ var validateEmailIn = function validateEmailIn() {
     return;
   }
 
-  _console_Log('email no valide!');
-
   areAllValide.push(false);
-}; //name or firstName
+}; //identity = name / firstName
 
 
 var validateIdentity = function validateIdentity(identity) {
-  debugger;
   var valideVal = '';
 
   if (identity === 'firstName') {
@@ -116,7 +91,6 @@ var validateIdentity = function validateIdentity(identity) {
       return;
     }
   } else {
-    debugger;
     valideVal = valideValue(regExName, $name_Input, MgErrors.name);
 
     if (valideVal !== '') {
@@ -127,12 +101,9 @@ var validateIdentity = function validateIdentity(identity) {
   }
 
   areAllValide.push(false);
-
-  _console_Log('name no valide!');
 };
 
 var validateQuantityIn = function validateQuantityIn() {
-  debugger;
   var valideVAl = valideValue(regExQuantity, $quantity_Input, MgErrors.quantity);
 
   if (valideVAl !== '') {
@@ -142,13 +113,10 @@ var validateQuantityIn = function validateQuantityIn() {
   }
 
   areAllValide.push(false);
-
-  _console_Log('quantity no valide!');
-}; // extension for validate form input value
+}; //  extension pour valider la valeur d'entrée du formulaire pour firstName/name/email/date/Quantity
 
 
 var valideValue = function valideValue(regex, elementInput, errorMg) {
-  debugger;
   var reg = new RegExp(regex);
 
   var _el = elementInput.value.trim();
@@ -162,9 +130,6 @@ var valideValue = function valideValue(regex, elementInput, errorMg) {
 
   elementInput.parentNode.setAttribute('data-error', "".concat(_el.length > 0 ? errorMg.invalid : errorMg.empty));
   elementInput.parentElement.dataset.errorVisible = !errorVisible;
-
-  _console_Log(elementInput);
-
   return '';
 };
 
@@ -182,10 +147,6 @@ var checkLocationIn = function checkLocationIn() {
       if (el.checked) {
         dataReserve.location = el.value;
         areAllValide.push(true);
-        debugger;
-
-        _console_Log(el);
-
         return;
       }
     }
@@ -207,12 +168,9 @@ var checkLocationIn = function checkLocationIn() {
   $location_tag.setAttribute('data-error', "".concat(MgErrors.location.empty));
   $location_tag.dataset.errorVisible = !errorVisible;
   areAllValide.push(false);
-
-  _console_Log('Location no checked!');
 };
 
 var checkConditionAccepted = function checkConditionAccepted() {
-  debugger;
   var errorVisible = false;
   $condition2_Input.parentNode.setAttribute('data-error-visible', errorVisible);
 
@@ -223,10 +181,10 @@ var checkConditionAccepted = function checkConditionAccepted() {
   }
 
   dataReserve.conditionsAccepted = [$condition1_Input.checked, $condition2_Input.checked];
-};
+}; // initialisation 
+
 
 var initFormValidator = function initFormValidator() {
-  debugger;
   validateIdentity('firstName');
   validateIdentity('Name');
   validateEmailIn();
@@ -235,28 +193,23 @@ var initFormValidator = function initFormValidator() {
   checkLocationIn();
   checkConditionAccepted();
   return areAllValide;
-};
+}; //check validité de formulaire
+
 
 function validate() {
-  debugger;
   var isValide = true;
   if (initFormValidator().includes(false)) isValide = false;
   return isValide;
-} // on click submit
+} // btn submit
 
 
 $submit_btn.addEventListener('click', function (ev) {
-  debugger;
   ev.preventDefault();
 
   if (!validate()) {
-    debugger;
-
-    _console_Log('validate no work');
-
+    console.log('validate no work');
     return;
   }
 
-  _console_Log(dataReserve);
+  console.log(dataReserve);
 });
-console.log('formReserve');

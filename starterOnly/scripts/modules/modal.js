@@ -6,6 +6,7 @@ const formData = document.querySelectorAll('.formData');
 
 modalBtn.forEach((btn) => btn.addEventListener('click', launchModal));
 closeModalIcon.addEventListener('click', launchModal);
+
 // launch modal event
 function editNav() {
   var x = document.getElementById('myTopnav');
@@ -16,8 +17,9 @@ function editNav() {
   }
 }
 
-// launch modal form adb close by closeModalIcon
+// launch modal form adb close by closeModalIcon / open modal
 function launchModal() {
+ 
   console.log(modalBg.style.display);
   if (modalBg.style.display !== 'block') {
     modalBg.style.display = 'block';
@@ -26,4 +28,4 @@ function launchModal() {
   modalBg.style.display = 'none';
 }
 
-console.log('modal');
+

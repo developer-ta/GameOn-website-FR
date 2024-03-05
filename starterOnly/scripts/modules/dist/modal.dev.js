@@ -18,7 +18,7 @@ function editNav() {
   } else {
     x.className = 'topnav';
   }
-} // launch modal form adb close by closeModalIcon
+} // launch modal form adb close by closeModalIcon / open modal
 
 
 function launchModal() {
@@ -31,5 +31,3 @@ function launchModal() {
 
   modalBg.style.display = 'none';
 }
-
-console.log('modal');
