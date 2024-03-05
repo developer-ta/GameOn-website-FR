@@ -56,7 +56,7 @@ const MgErrors = {
   conditions: { empty: "Veuillez accepter les conditions d'utilisation pour continuer." },
 };
 
-// Les fonctions valider la valeur d'entrée du formulaire pour firstName/name/email/date/Quantity
+// Les fonctions pour valider la valeur d'entrée du formulaire pour firstName/name/email/date/Quantity
 let validateDateIn = () => {
   
 
