@@ -191,6 +191,7 @@ const stateSucceed = () => {
   $form.insertAdjacentElement('afterbegin', $divSucceed);
   $submit_btn.value = 'Fermer';
   $submit_btn.setAttribute('data-Succeed', 'true');
+  $condition1_Input.checked = true;
 };
 //init form
 let formDefault = () => {
