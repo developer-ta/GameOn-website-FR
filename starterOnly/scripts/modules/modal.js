@@ -19,7 +19,6 @@ function editNav() {
 
 // launch modal form adb close by closeModalIcon / open modal
 function launchModal() {
- 
   console.log(modalBg.style.display);
   if (modalBg.style.display !== 'block') {
     modalBg.style.display = 'block';

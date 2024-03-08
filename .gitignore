@@ -1,3 +1,4 @@
 *.scss
 starterOnly/styles/dist
 .vscode/settings.json
+starterOnly\scripts\modules\dist

@@ -7,6 +7,11 @@ const $quantity_Input = document.getElementById('quantity');
 const $locations_Input = document.querySelectorAll("input[name='location']");
 const $condition1_Input = document.getElementById('checkbox1');
 const $condition2_Input = document.getElementById('checkbox2');
+const $form = document.querySelector("form[name='reserve']");
+const $formDatas = document.querySelectorAll('.formData');
+const $p = document.querySelector('.text-label');
+const $div_content = document.querySelector('.bground .content');
+const $divSucceed = document.createElement('div');
 
 //Récupérer le div contenant des checkboxes des villes
 const $location_tag = document.getElementById('location');
@@ -17,9 +22,10 @@ const $submit_btn = document.querySelector("input[type='submit']");
 // Objet qui représente une réservation de forme.
 const dataReserve = {};
 
+let isValide = false;
 /**
  *@type {boolean[]}  */
-const areAllValide = [];
+let areAllValide = [];
 
 //regExp
 const regExDate = '^0[0-9]|[12][0-9]|3[01]/(0[1-9]|1[1,2])/(19|20)d{2}$';
@@ -58,8 +64,6 @@ const MgErrors = {
 
 // Les fonctions pour valider la valeur d'entrée du formulaire pour firstName/name/email/date/Quantity
 let validateDateIn = () => {
-  
-
   let valideVal = valideValue(regExDate, $birthDate_Input, MgErrors.date);
   if (valideVal !== '') {
     dataReserve.birthDate = valideVal;
@@ -70,8 +74,6 @@ let validateDateIn = () => {
 };
 
 let validateEmailIn = () => {
-  
-
   let valideVal = valideValue(regExEmail, $email_Input, MgErrors.email);
 
   if (valideVal !== '') {
@@ -84,7 +86,6 @@ let validateEmailIn = () => {
 
 //identity = name / firstName
 let validateIdentity = (identity) => {
-  
   let valideVal = '';
 
   if (identity === 'firstName') {
@@ -95,7 +96,6 @@ let validateIdentity = (identity) => {
       return;
     }
   } else {
-    
     valideVal = valideValue(regExName, $name_Input, MgErrors.name);
     if (valideVal !== '') {
       dataReserve.name = valideVal;
@@ -104,12 +104,9 @@ let validateIdentity = (identity) => {
     }
   }
   areAllValide.push(false);
- 
 };
 
 let validateQuantityIn = () => {
-  
-
   let valideVAl = valideValue(regExQuantity, $quantity_Input, MgErrors.quantity);
   if (valideVAl !== '') {
     dataReserve.quantity = valideVAl;
@@ -117,13 +114,10 @@ let validateQuantityIn = () => {
     return;
   }
   areAllValide.push(false);
-
 };
 
 //  extension pour valider la valeur d'entrée du formulaire pour firstName/name/email/date/Quantity
 let valideValue = (regex, elementInput, errorMg) => {
-  
-
   let reg = new RegExp(regex);
   let _el = elementInput.value.trim();
 
@@ -138,7 +132,7 @@ let valideValue = (regex, elementInput, errorMg) => {
     `${_el.length > 0 ? errorMg.invalid : errorMg.empty}`
   );
   elementInput.parentElement.dataset.errorVisible = !errorVisible;
-  
+
   return '';
 };
 
@@ -149,19 +143,16 @@ let checkLocationIn = () => {
     if (el.checked) {
       dataReserve.location = el.value;
       areAllValide.push(true);
-      
-     
-       return;
+
+      return;
     }
   }
   $location_tag.setAttribute('data-error', `${MgErrors.location.empty}`);
   $location_tag.dataset.errorVisible = !errorVisible;
   areAllValide.push(false);
-
 };
 
 let checkConditionAccepted = () => {
-
   let errorVisible = false;
   $condition2_Input.parentNode.setAttribute('data-error-visible', errorVisible);
 
@@ -172,9 +163,9 @@ let checkConditionAccepted = () => {
   }
   dataReserve.conditionsAccepted = [$condition1_Input.checked, $condition2_Input.checked];
 };
-// initialisation 
+
+// initialisation
 let initFormValidator = () => {
-  
   validateIdentity('firstName');
   validateIdentity('Name');
   validateEmailIn();
@@ -185,24 +176,78 @@ let initFormValidator = () => {
   return areAllValide;
 };
 
+//si Validation avec succès
+const stateSucceed = () => {
+  debugger;
+  $formDatas.forEach((el) => (el.style.display = 'none'));
+  $p.textContent = 'Merci pour votre inscription';
+
+  $p.style =
+    'font-family: DM Sans; font-size: 36px;font-weight: 400;line-height: 51px;letter-spacing: 0em;text-align: center;';
+  $divSucceed.style = 'padding: 49% 8%';
+  $div_content.style = ' width: 100%;margin: 16% auto 0% auto';
+
+  $divSucceed.appendChild($p);
+  $form.insertAdjacentElement('afterbegin', $divSucceed);
+  $submit_btn.value = 'Fermer';
+  $submit_btn.setAttribute('data-Succeed', 'true');
+};
+//init form
+let formDefault = () => {
+  areAllValide = [];
+  isValide = false;
+
+  let inputVals = [
+    $firstName_Input,
+    $name_Input,
+    $email_Input,
+    $birthDate_Input,
+    $birthDate_Input,
+    $quantity_Input,
+  ];
+
+  inputVals.forEach((el) => (el.value = ''));
+
+  $locations_Input.forEach((el) => (el.checked = false));
+
+  $condition1_Input.checked = true;
+  $condition2_Input.checked = false;
+
+  $divSucceed.style = '';
+  $p.style = '';
+  $div_content.style = '';
+
+  $submit_btn.value = "C'est parti";
+  $submit_btn.removeAttribute('data-succeed');
+
+  $formDatas.forEach((el) => (el.style.display = 'block'));
+  $p.textContent = 'A quel tournoi souhaitez-vous participer cette année ?';
+
+  $form.querySelector('.formData:nth-child(6)').insertAdjacentElement('afterend', $p);
+  $form.removeChild($divSucceed);
+};
+
 //check validité de formulaire
 function validate() {
-  
-  let isValide = true;
-  if (initFormValidator().includes(false)) isValide = false;
-  return isValide;
+  if (initFormValidator().includes(false)) return isValide;
+  return (isValide = true);
 }
 
 // btn submit
 $submit_btn.addEventListener('click', (ev) => {
-  
   ev.preventDefault();
-  if (!validate()) {
-    
+
+  if (!isValide && !validate()) {
     console.log('validate no work');
+    areAllValide = [];
+    return;
+  } else if ($submit_btn.dataset.succeed) {
+    formDefault();
+    launchModal();
     return;
   }
-  console.log(dataReserve);
-});
 
+  console.log(dataReserve);
+  stateSucceed();
+});
 

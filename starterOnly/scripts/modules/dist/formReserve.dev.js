@@ -8,13 +8,19 @@ var $birthDate_Input = document.getElementById('birthdate');
 var $quantity_Input = document.getElementById('quantity');
 var $locations_Input = document.querySelectorAll("input[name='location']");
 var $condition1_Input = document.getElementById('checkbox1');
-var $condition2_Input = document.getElementById('checkbox2'); //Récupérer le div contenant des checkboxes des villes
+var $condition2_Input = document.getElementById('checkbox2');
+var $form = document.querySelector("form[name='reserve']");
+var $formDatas = document.querySelectorAll('.formData');
+var $p = document.querySelector('.text-label');
+var $div_content = document.querySelector('.bground .content');
+var $divSucceed = document.createElement('div'); //Récupérer le div contenant des checkboxes des villes
 
 var $location_tag = document.getElementById('location'); //Récupérer le bouton de soumission du formulaire
 
 var $submit_btn = document.querySelector("input[type='submit']"); // Objet qui représente une réservation de forme.
 
 var dataReserve = {};
+var isValide = false;
 /**
  *@type {boolean[]}  */
 
@@ -181,7 +187,7 @@ var checkConditionAccepted = function checkConditionAccepted() {
   }
 
   dataReserve.conditionsAccepted = [$condition1_Input.checked, $condition2_Input.checked];
-}; // initialisation 
+}; // initialisation
 
 
 var initFormValidator = function initFormValidator() {
@@ -193,23 +199,70 @@ var initFormValidator = function initFormValidator() {
   checkLocationIn();
   checkConditionAccepted();
   return areAllValide;
+}; //si Validation avec succès
+
+
+var stateSucceed = function stateSucceed() {
+  debugger;
+  $formDatas.forEach(function (el) {
+    return el.style.display = 'none';
+  });
+  $p.textContent = 'Merci pour votre inscription';
+  $p.style = 'font-family: DM Sans; font-size: 36px;font-weight: 400;line-height: 51px;letter-spacing: 0em;text-align: center;';
+  $divSucceed.style = 'padding: 49% 8%';
+  $div_content.style = ' width: 100%;margin: 16% auto 0% auto';
+  $divSucceed.appendChild($p);
+  $form.insertAdjacentElement('afterbegin', $divSucceed);
+  $submit_btn.value = 'Fermer';
+  $submit_btn.setAttribute('data-Succeed', 'true');
+}; //init form
+
+
+var formDefault = function formDefault() {
+  areAllValide = [];
+  isValide = false;
+  var inputVals = [$firstName_Input, $name_Input, $email_Input, $birthDate_Input, $birthDate_Input, $quantity_Input];
+  inputVals.forEach(function (el) {
+    return el.value = '';
+  });
+  $locations_Input.forEach(function (el) {
+    return el.checked = false;
+  });
+  $condition1_Input.checked = true;
+  $condition2_Input.checked = false;
+  $divSucceed.style = '';
+  $p.style = '';
+  $div_content.style = '';
+  $submit_btn.value = "C'est parti";
+  $submit_btn.removeAttribute('data-succeed');
+  $formDatas.forEach(function (el) {
+    return el.style.display = 'block';
+  });
+  $p.textContent = 'A quel tournoi souhaitez-vous participer cette année ?';
+  $form.querySelector('.formData:nth-child(6)').insertAdjacentElement('afterend', $p);
+  $form.removeChild($divSucceed);
 }; //check validité de formulaire
 
 
 function validate() {
-  var isValide = true;
-  if (initFormValidator().includes(false)) isValide = false;
-  return isValide;
+  if (initFormValidator().includes(false)) return isValide;
+  return isValide = true;
 } // btn submit
 
 
 $submit_btn.addEventListener('click', function (ev) {
   ev.preventDefault();
 
-  if (!validate()) {
+  if (!isValide && !validate()) {
     console.log('validate no work');
+    areAllValide = [];
+    return;
+  } else if ($submit_btn.dataset.succeed) {
+    formDefault();
+    launchModal();
     return;
   }
 
   console.log(dataReserve);
+  stateSucceed();
 });
